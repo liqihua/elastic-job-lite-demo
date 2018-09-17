@@ -3,6 +3,21 @@ server:
   servlet:
     context-path: /@pom.artifactId@
 
+#数据库连接配置，用来给elastic自动记录任务的执行痕迹、任务状态改变痕迹
+jdbc:
+  url: jdbc:mysql://127.0.0.1:3306/elastic_job?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Hongkong
+  username: root
+  password: 123
+  driverClassName: com.mysql.cj.jdbc.Driver
+
+#zookeeper配置
 zk:
-  server-list: 127.0.0.1:2181
-  namespace: @pom.artifactId@
+  server-list: 127.0.0.1:2181 #zookeeper服务地址
+  namespace: @pom.artifactId@ #命名空间，分隔每个zookeeper客户端的数据
+
+#elastic任务配置
+job:
+  name: job0917 #任务名称
+  cron: 0/10 * * * * ? #cron表达式
+  shardingTotalCount: 3 #任务分片数量
+  shardingItemParameters: 0=广州,1=成都,2=上海 #每个分片节点需要传递的参数
